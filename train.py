@@ -5,6 +5,8 @@ import sys
 import tensorflow as tf
 import numpy as np
 from tensorflow.python.ops import rnn_cell_impl
+from tensorflow.contrib.rnn.python.ops import core_rnn_cell
+linear = core_rnn_cell._linear
 
 from utils import createVocabulary
 from utils import loadVocabulary
@@ -114,7 +116,7 @@ def createModel(input_data, input_size, sequence_length, slot_size, intent_size,
 
                 slot_inputs_shape = tf.shape(slot_inputs)
                 slot_inputs = tf.reshape(slot_inputs, [-1, attn_size])
-                y = rnn_cell_impl._linear(slot_inputs, attn_size, True)
+                y = linear(slot_inputs, attn_size, True)
                 y = tf.reshape(y, slot_inputs_shape)
                 y = tf.expand_dims(y, 2)
                 s = tf.reduce_sum(v * tf.tanh(hidden_features + y), [3])
