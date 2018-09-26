@@ -267,6 +267,7 @@ with tf.Session() as sess:
             data_processor = DataProcessor(os.path.join(full_train_path, arg.input_file), os.path.join(full_train_path, arg.slot_file), os.path.join(full_train_path, arg.intent_file), in_vocab, slot_vocab, intent_vocab)
         in_data, slot_data, slot_weight, length, intents,_,_,_ = data_processor.get_batch(arg.batch_size)
         feed_dict = {input_data.name: in_data, slots.name: slot_data, slot_weights.name: slot_weight, sequence_length.name: length, intent.name: intents}
+        tf.add_to_collection("training_outputs", training_outputs)
         ret = sess.run(training_outputs, feed_dict)
         loss += np.mean(ret[1])
 
